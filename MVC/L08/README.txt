@@ -10,7 +10,7 @@ universities.sql -- universities example used to JOIN with metropolises in
    MySQL handout
    
 =====
-ExampleAccess.java
+com.allen.ExampleAccess.java
 
 This file demonstrates accessing MySQL from Java.  Before running
 this, you'll need to download the MySQL/JDBC driver as discussed

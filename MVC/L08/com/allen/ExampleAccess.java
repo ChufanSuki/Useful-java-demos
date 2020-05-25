@@ -1,3 +1,5 @@
+package com.allen;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,35 +16,38 @@ public class ExampleAccess {
 	public static void main(String[] args) {
 		
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
+			// make sure that java knows about the driver class.
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			// create a connect
+			// url: jdbc:mysql://localhost:3306
+			// must be placed within a try catch block with a catch for SQLException
 			Connection con = DriverManager.getConnection
 				( "jdbc:mysql://" + server, account ,password);
-			
-			Statement stmt = con.createStatement();
+			// Statement object which can be used to execute standard SQL statements
+			Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			stmt.executeQuery("USE " + database);
 			ResultSet rs = stmt.executeQuery("SELECT * FROM metropolises");
 
-// Sample Access Looking for Specific Item			
-			rs.absolute(3);
-			System.out.println(rs.getString("metropolis"));
+// Sample Access Looking for Specific Item
+            // indexing is not zero-based
+//			rs.absolute(3);
+//			System.out.println(rs.getString("metropolis"));
 			
-// Sample Loop Access			
+// Sample Loop Access
 //			while(rs.next()) {
 //				String s = rs.getString("metropolis");
 //				int i = rs.getInt("population");
 //				System.out.println(s + "\t" + i);
 //			}
-
+			// Use executeUpdate for UPDATE, INSERT, and DELETE MySQL statements.
+			stmt.executeUpdate(
+					"DELETE FROM metropolises WHERE continent = \"North America\"");
 			con.close();
 			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
-		catch (ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-			  
+
 
 	}
 
